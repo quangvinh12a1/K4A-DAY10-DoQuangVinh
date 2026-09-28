@@ -1,6 +1,6 @@
 {
   "report_name": "baseline",
-  "generated_at": "2026-09-28T18:07:03.287511+00:00",
+  "generated_at": "2026-09-28T18:38:55.577294+00:00",
   "row_count": 24,
   "success": true,
   "status": "PASS",
@@ -62,7 +62,7 @@
     }
   ],
   "freshness": {
-    "generated_at": "2026-09-28T18:07:03.285237+00:00",
+    "generated_at": "2026-09-28T18:38:55.575136+00:00",
     "latest_published": "2026-09-15",
     "oldest_published": "2026-04-01",
     "threshold_days": 180,
