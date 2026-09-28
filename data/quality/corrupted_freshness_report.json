@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-09-28T18:30:26.925521+00:00",
+  "latest_published": "2026-08-01",
+  "oldest_published": "2021-04-01",
+  "threshold_days": 180,
+  "max_stale_ratio": 0.25,
+  "stale_rows": 10,
+  "total_rows": 24,
+  "stale_ratio": 0.4167,
+  "is_fresh": false,
+  "message": "CANH BAO: 42% bai bao cu hon 180 ngay (> 25%), can cap nhat du lieu moi."
+}

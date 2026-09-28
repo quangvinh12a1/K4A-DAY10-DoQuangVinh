@@ -208,8 +208,10 @@ def generate_corruption_report(
         f"- **Detection:** the GX gate flagged the corrupted batch (`success = {corrupted_quality.get('success')}`, failed: "
         f"{', '.join(f'`{name}`' for name in corrupted_quality.get('failed_expectations', [])) or 'none'}) and the freshness monitor "
         f"reported `is_fresh = {corrupted_freshness.get('is_fresh')}` (stale ratio {(corrupted_freshness.get('stale_ratio') or 0):.0%}).",
-        "- **Blind spots:** dropped newest records and noisy summaries do not violate any single expectation directly; "
-        "they are only visible through row-count drift, freshness, and downstream metrics.",
+        f"- **Blind spots:** row count stayed at {corrupted_quality.get('row_count')} (baseline "
+        f"{baseline_quality.get('row_count')}) because duplicated rows masked the dropped newest records, so "
+        "`expect_table_row_count_to_be_between` still passed; noise injected into `text_for_embedding` and truncated "
+        "titles violate no expectation either. These are only visible through downstream metrics.",
         f"- **Repair:** re-running cleaning from the preserved raw snapshot (`data/raw/crossref_records.json`) is idempotent; "
         f"repaired metrics {'fully match' if recovered else 'do not fully match'} the baseline "
         f"and the repaired batch passes the gate (`success = {repaired_quality.get('success')}`).",

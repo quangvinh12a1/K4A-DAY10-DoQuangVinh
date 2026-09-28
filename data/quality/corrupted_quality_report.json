@@ -1,0 +1,90 @@
+{
+  "report_name": "corrupted",
+  "generated_at": "2026-09-28T18:30:26.927946+00:00",
+  "row_count": 24,
+  "success": false,
+  "status": "FAIL",
+  "failed_expectations": [
+    "expect_column_values_to_be_unique",
+    "expect_column_value_lengths_to_be_between"
+  ],
+  "checks": [
+    {
+      "expectation": "expect_table_row_count_to_be_between",
+      "column": null,
+      "success": true,
+      "observed_value": 24,
+      "unexpected_count": null,
+      "unexpected_percent": null,
+      "partial_unexpected_list": []
+    },
+    {
+      "expectation": "expect_column_values_to_not_be_null",
+      "column": "paper_id",
+      "success": true,
+      "observed_value": null,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": []
+    },
+    {
+      "expectation": "expect_column_values_to_be_unique",
+      "column": "paper_id",
+      "success": false,
+      "observed_value": null,
+      "unexpected_count": 10,
+      "unexpected_percent": 41.66666666666667,
+      "partial_unexpected_list": [
+        "10.3390/knowledge6030022",
+        "10.2196/preprints.106157",
+        "10.3390/buildings16132637",
+        "10.63646/kpqm1958",
+        "10.21203/rs.3.rs-9882260/v1"
+      ]
+    },
+    {
+      "expectation": "expect_column_values_to_not_be_null",
+      "column": "title",
+      "success": true,
+      "observed_value": null,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": []
+    },
+    {
+      "expectation": "expect_column_values_to_not_be_null",
+      "column": "text_for_embedding",
+      "success": true,
+      "observed_value": null,
+      "unexpected_count": 0,
+      "unexpected_percent": 0.0,
+      "partial_unexpected_list": []
+    },
+    {
+      "expectation": "expect_column_value_lengths_to_be_between",
+      "column": "summary",
+      "success": false,
+      "observed_value": null,
+      "unexpected_count": 4,
+      "unexpected_percent": 16.666666666666664,
+      "partial_unexpected_list": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    }
+  ],
+  "freshness": {
+    "generated_at": "2026-09-28T18:30:26.925521+00:00",
+    "latest_published": "2026-08-01",
+    "oldest_published": "2021-04-01",
+    "threshold_days": 180,
+    "max_stale_ratio": 0.25,
+    "stale_rows": 10,
+    "total_rows": 24,
+    "stale_ratio": 0.4167,
+    "is_fresh": false,
+    "message": "CANH BAO: 42% bai bao cu hon 180 ngay (> 25%), can cap nhat du lieu moi."
+  }
+}

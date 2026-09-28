@@ -1,0 +1,78 @@
+{
+  "generated_at": "2026-09-28T18:30:26.801774+00:00",
+  "seed": 42,
+  "input_rows": 24,
+  "output_rows": 24,
+  "corruptions": [
+    {
+      "corruption": "drop_latest_records",
+      "description": "Drop 20% newest papers.",
+      "affected_rows": 5,
+      "affected_paper_ids": [
+        "10.21203/rs.3.rs-10489777/v1",
+        "10.70267/aitia.2026482489",
+        "10.21203/rs.3.rs-10349437/v1",
+        "10.54254/2755-2721/2026.36624",
+        "10.36887/2415-8453-2026-3-2"
+      ]
+    },
+    {
+      "corruption": "blank_summary",
+      "description": "Blank out summary text (empty scrape).",
+      "affected_rows": 3,
+      "affected_paper_ids": [
+        "10.28932/jutisi.v12i2.13099",
+        "10.36948/ijfmr.2026.v08i04.85777",
+        "10.3390/buildings16132637"
+      ]
+    },
+    {
+      "corruption": "truncate_title",
+      "description": "Truncate title to 8 characters (< 10).",
+      "affected_rows": 3,
+      "affected_paper_ids": [
+        "10.2118/234689-pa",
+        "10.2196/preprints.106157",
+        "10.63125/gseh0k17"
+      ]
+    },
+    {
+      "corruption": "stale_published_date",
+      "description": "Shift published date back 5 years.",
+      "affected_rows": 8,
+      "affected_paper_ids": [
+        "10.28932/jutisi.v12i2.13099",
+        "10.21203/rs.3.rs-10423755/v1",
+        "10.3390/knowledge6030022",
+        "10.36948/ijfmr.2026.v08i04.85777",
+        "10.21203/rs.3.rs-9882260/v1",
+        "10.52060/juptik.v4i1.4318",
+        "10.20944/preprints202604.0339.v1",
+        "10.63125/gseh0k17"
+      ]
+    },
+    {
+      "corruption": "inject_text_noise",
+      "description": "Insert garbage tokens into text_for_embedding.",
+      "affected_rows": 4,
+      "affected_paper_ids": [
+        "10.28932/jutisi.v12i2.13099",
+        "10.21203/rs.3.rs-10178277/v1",
+        "10.2196/preprints.106157",
+        "10.1093/sleep/zsag091.0346"
+      ]
+    },
+    {
+      "corruption": "duplicate_rows",
+      "description": "Append duplicated rows (same paper_id).",
+      "affected_rows": 5,
+      "affected_paper_ids": [
+        "10.3390/knowledge6030022",
+        "10.2196/preprints.106157",
+        "10.3390/buildings16132637",
+        "10.63646/kpqm1958",
+        "10.21203/rs.3.rs-9882260/v1"
+      ]
+    }
+  ]
+}

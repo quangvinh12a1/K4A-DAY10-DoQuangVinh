@@ -10,12 +10,11 @@ from core.utils import now_utc, write_json
 SEED = 42
 DROP_LATEST_RATIO = 0.20
 BLANK_SUMMARY_RATIO = 0.15
-NOISE_RATIO = 0.15
+NOISE_RATIO = 0.20
 TRUNCATE_TITLE_RATIO = 0.15
 STALE_DATE_RATIO = 0.40
-DUPLICATE_RATIO = 0.20
-STALE_SHIFT_DAYS = 365
-TITLE_MAX_CHARS = 7
+STALE_SHIFT_YEARS = 5
+TITLE_MAX_CHARS = 8
 NOISE_TOKENS = ["#@!%", "��", "lorem", "NULL", "<br/>", "&amp;&amp;", "xX9$q"]
 
 
@@ -70,32 +69,33 @@ def corrupt_clean_dataframe(df: pd.DataFrame, output_log_path) -> pd.DataFrame:
     record("blank_summary", "Blank out summary text (empty scrape).", corrupted.loc[rows])
     corrupted.loc[rows, "summary"] = ""
 
-    # 3. Inject noise vao summary (chon trong cac dong chua bi blank).
-    rows = _sample(rng, [i for i in remaining if corrupted.at[i, "summary"]], NOISE_RATIO)
-    record("inject_noise", "Insert garbage tokens into summary.", corrupted.loc[rows])
-    for i in rows:
-        corrupted.at[i, "summary"] = _inject_noise(corrupted.at[i, "summary"], rng)
-
-    # 4. Truncate title < 8 ky tu.
+    # 3. Truncate title xuong duoi 10 ky tu.
     rows = _sample(rng, remaining, TRUNCATE_TITLE_RATIO)
-    record("truncate_title", f"Truncate title to {TITLE_MAX_CHARS} characters.", corrupted.loc[rows])
+    record("truncate_title", f"Truncate title to {TITLE_MAX_CHARS} characters (< 10).", corrupted.loc[rows])
     corrupted.loc[rows, "title"] = corrupted.loc[rows, "title"].str.slice(0, TITLE_MAX_CHARS)
 
-    # 5. Stale date: lui published ve 365 ngay truoc.
+    # 4. Stale date: lui published ve 5 nam truoc.
     rows = _sample(rng, remaining, STALE_DATE_RATIO)
-    record("stale_published_date", f"Shift published date back {STALE_SHIFT_DAYS} days.", corrupted.loc[rows])
-    shifted = pd.to_datetime(corrupted.loc[rows, "published"]) - pd.Timedelta(days=STALE_SHIFT_DAYS)
+    record("stale_published_date", f"Shift published date back {STALE_SHIFT_YEARS} years.", corrupted.loc[rows])
+    original = pd.to_datetime(corrupted.loc[rows, "published"])
+    shifted = original - pd.DateOffset(years=STALE_SHIFT_YEARS)
     corrupted.loc[rows, "published"] = shifted.dt.strftime("%Y-%m-%d")
-    corrupted.loc[rows, "age_days"] = corrupted.loc[rows, "age_days"].astype(int) + STALE_SHIFT_DAYS
+    corrupted.loc[rows, "age_days"] = corrupted.loc[rows, "age_days"].astype(int) + (original - shifted).dt.days
 
-    # 6. Duplicate rows.
-    rows = _sample(rng, remaining, DUPLICATE_RATIO)
-    record("duplicate_rows", "Append duplicated rows (same paper_id).", corrupted.loc[rows])
-    corrupted = pd.concat([corrupted, corrupted.loc[rows]], ignore_index=True)
-
-    # 7. Rebuild derived columns de loi lan vao embedding (silent failure).
+    # 5. Rebuild derived columns de loi (blank/truncate/stale) lan vao embedding (silent failure).
     corrupted["summary_chars"] = corrupted["summary"].str.len()
     corrupted["text_for_embedding"] = corrupted.apply(_rebuild_embedding_text, axis=1)
+
+    # 6. Inject noise truc tiep vao text_for_embedding.
+    rows = _sample(rng, remaining, NOISE_RATIO)
+    record("inject_text_noise", "Insert garbage tokens into text_for_embedding.", corrupted.loc[rows])
+    for i in rows:
+        corrupted.at[i, "text_for_embedding"] = _inject_noise(corrupted.at[i, "text_for_embedding"], rng)
+
+    # 7. Duplicate rows: nhan ban so dong bang so dong da bi drop (row count giu nguyen -> loi "tang hinh").
+    rows = sorted(rng.sample(remaining, min(len(latest), len(remaining))))
+    record("duplicate_rows", "Append duplicated rows (same paper_id).", corrupted.loc[rows])
+    corrupted = pd.concat([corrupted, corrupted.loc[rows]], ignore_index=True)
 
     write_json(
         output_log_path,
