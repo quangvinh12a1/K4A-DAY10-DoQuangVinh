@@ -54,7 +54,12 @@ def run_data_quality_checks(df: pd.DataFrame, settings: Settings, report_name: s
     validation = batch.validate(suite)
 
     checks = [_summarize_result(result) for result in validation.results]
-    freshness = build_freshness_report(df, settings, settings.paths.quality_dir / f"{report_name}_freshness_report.json")
+    freshness_path = (
+        settings.paths.freshness_report
+        if report_name == "baseline"
+        else settings.paths.quality_dir / f"{report_name}_freshness_report.json"
+    )
+    freshness = build_freshness_report(df, settings, freshness_path)
     gx_success = bool(validation.success)
 
     report = {

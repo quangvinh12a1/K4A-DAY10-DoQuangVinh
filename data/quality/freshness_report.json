@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-09-28T18:07:03.285237+00:00",
+  "latest_published": "2026-09-15",
+  "oldest_published": "2026-04-01",
+  "threshold_days": 180,
+  "max_stale_ratio": 0.25,
+  "stale_rows": 0,
+  "total_rows": 24,
+  "stale_ratio": 0.0,
+  "is_fresh": true,
+  "message": "Du lieu con tuoi."
+}
